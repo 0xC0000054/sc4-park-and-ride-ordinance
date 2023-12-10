@@ -177,6 +177,10 @@ void ParknRideOrdinance::UpdateCarCanReachDestination() const
 			propertyHolder->Release();
 			propertyHolder = nullptr;
 		}
+		else
+		{
+			logger.WriteLine(LogOptions::Errors, "Failed to load the traffic simulator tuning exemplar.");
+		}
 
 		if (valueChanged)
 		{
@@ -220,6 +224,12 @@ void ParknRideOrdinance::UpdateCarCanReachDestination() const
 						LogOptions::Errors,
 						"Failed to send the updated 'Travel type can reach destination' value to the traffic simulator.");
 				}
+			}
+			else
+			{
+				logger.WriteLine(
+					LogOptions::Errors,
+					"Failed to send the updated 'Travel type can reach destination' value to the traffic simulator.");
 			}
 
 			// Verify that are in-memory modifications to the exemplar are sill present.
