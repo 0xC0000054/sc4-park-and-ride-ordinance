@@ -213,8 +213,8 @@ void ParknRideOrdinance::UpdateCarCanReachDestination() const
 					LogOptions::Info,
 					"Sending the updated 'Travel type can reach destination' value to the traffic simulator.");
 
-				bool result2 = pMsgServ->MessageSend(static_cast<cIGZMessage2*>(static_cast<cIGZMessage2Standard*>(&message)));
-				if (!result2)
+				result = pMsgServ->MessageSend(static_cast<cIGZMessage2*>(static_cast<cIGZMessage2Standard*>(&message)));
+				if (!result)
 				{
 					logger.WriteLine(
 						LogOptions::Errors,
@@ -224,7 +224,7 @@ void ParknRideOrdinance::UpdateCarCanReachDestination() const
 
 			// Verify that are in-memory modifications to the exemplar are sill present.
 
-			bool result = pResourceManager->GetResource(
+			result = pResourceManager->GetResource(
 				key,
 				GZIID_cISCPropertyHolder,
 				reinterpret_cast<void**>(&propertyHolder),
