@@ -43,8 +43,6 @@
 #include <Windows.h>
 #include "wil/resource.h"
 #include "wil/win32_helpers.h"
-#include "boost/property_tree/ptree.hpp"
-#include "boost/property_tree/ini_parser.hpp"
 
 static constexpr uint32_t kSC4MessagePostCityInit = 0x26D31EC1;
 static constexpr uint32_t kSC4MessagePreCityShutdown = 0x26D31EC2;
