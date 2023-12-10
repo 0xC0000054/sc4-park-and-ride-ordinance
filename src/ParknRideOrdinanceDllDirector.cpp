@@ -219,25 +219,27 @@ public:
 
 			if (pOrdinanceSimulator)
 			{
-				parkAndRideOrdinance.PostCityInit(pCity);
-
-				// Only add the ordinance if it is not already present. If it is part
-				// of the city save file it will have already been loaded at this point.
 				cISC4Ordinance* pOrdinance = pOrdinanceSimulator->GetOrdinanceByID(parkAndRideOrdinance.GetID());
+
+				if (!pOrdinance)
+				{
+					// Only add the ordinance if it is not already present. If it is part
+					// of the city save file it will have already been loaded at this point.
+					pOrdinanceSimulator->AddOrdinance(parkAndRideOrdinance);
+					pOrdinance = pOrdinanceSimulator->GetOrdinanceByID(parkAndRideOrdinance.GetID());
+				}
 
 				if (pOrdinance)
 				{
 					ParknRideOrdinance* pParkAndRideOrdinance = reinterpret_cast<ParknRideOrdinance*>(pOrdinance);
-					pParkAndRideOrdinance->UpdateCarCanReachDestination();
+					pParkAndRideOrdinance->PostCityInit(pCity);
 					pParkAndRideOrdinance->SetName(localizedName);
 					pParkAndRideOrdinance->SetDescription(localizedDescription);
+					pParkAndRideOrdinance->UpdateCarCanReachDestination();
 				}
 				else
 				{
-					parkAndRideOrdinance.SetName(localizedName);
-					parkAndRideOrdinance.SetDescription(localizedDescription);
-					pOrdinanceSimulator->AddOrdinance(parkAndRideOrdinance);
-					parkAndRideOrdinance.UpdateCarCanReachDestination();
+					Logger::GetInstance().WriteLine(LogOptions::Errors, "Failed to add the ordinance.");
 				}
 
 				//DumpRegisteredOrdinances(pCity, pOrdinanceSimulator);
@@ -255,8 +257,14 @@ public:
 
 			if (pOrdinanceSimulator)
 			{
-				parkAndRideOrdinance.PreCityShutdown(pCity);
-				pOrdinanceSimulator->RemoveOrdinance(parkAndRideOrdinance);
+				cISC4Ordinance* pOrdinance = pOrdinanceSimulator->GetOrdinanceByID(parkAndRideOrdinance.GetID());
+
+				if (pOrdinance)
+				{
+					ParknRideOrdinance* pParkAndRideOrdinance = reinterpret_cast<ParknRideOrdinance*>(pOrdinance);
+					pParkAndRideOrdinance->PreCityShutdown(pCity);
+					pOrdinanceSimulator->RemoveOrdinance(*pOrdinance);
+				}
 			}
 		}
 	}
