@@ -64,6 +64,6 @@ You may need to adjust the resolution for your screen.
 [ParknRideOrdinance.h](src/ParknRideOrdinance.h) defines the methods that the ordinance overrides for its custom behavior.    
 [ParknRideOrdinance.cpp](src/ParknRideOrdinance.cpp) provides the implementation for the methods that the ordinance overrides.
 
-[OrdinanceBase.cpp](src/OrdinanceBase.cpp) is the base class for `HumaneSocietyOrdinance`. It handles the common logic for a custom ordinance.
+[OrdinanceBase.cpp](src/OrdinanceBase.cpp) is the base class for `ParknRideOrdinance`. It handles the common logic for a custom ordinance.
 [OrdinancePropertyHolder.cpp](src/OrdinancePropertyHolder.cpp) provides the game with a list of effects that should be applied when the ordinance is enabled.
 The effects can include Mayor Rating boosts, Demand boosts, etc.
