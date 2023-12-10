@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34322.80
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SC4ResortOrdinance", "SC4ResortOrdinance.vcxproj", "{67BAB148-B3A2-43ED-A977-1C3361F5949D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{67BAB148-B3A2-43ED-A977-1C3361F5949D}.Debug|x86.ActiveCfg = Debug|Win32
+		{67BAB148-B3A2-43ED-A977-1C3361F5949D}.Debug|x86.Build.0 = Debug|Win32
+		{67BAB148-B3A2-43ED-A977-1C3361F5949D}.Release|x86.ActiveCfg = Release|Win32
+		{67BAB148-B3A2-43ED-A977-1C3361F5949D}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B862E50C-D757-46BE-ADCF-DC3E3995CC14}
+	EndGlobalSection
+EndGlobal
