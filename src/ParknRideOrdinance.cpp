@@ -11,8 +11,10 @@
 ////////////////////////////////////////////////////////////////////////////
 
 #include "ParknRideOrdinance.h"
+#include "Stopwatch.h"
 #include "cISC4Simulator.h"
 #include "cGZPersistResourceKey.h"
+#include "cIGZMessageServer.h"
 #include "cIGZMessageServer2.h"
 #include "cIGZPersistResourceManager.h"
 #include "GZServPtrs.h"
@@ -58,6 +60,66 @@ namespace
 
 		return properties;
 	}
+
+	void RunMessageServerPump(int maxIterations, int maxTimeInMilliseconds)
+	{
+		cIGZMessageServerPtr pMsgServ;
+
+		if (pMsgServ)
+		{
+			Stopwatch timer;
+			timer.Start();
+
+			for (int i = 0; i < maxIterations; i++)
+			{
+				int queueSize = pMsgServ->GetMessageQueueSize();
+
+				if (queueSize == 0)
+				{
+					break;
+				}
+
+				pMsgServ->OnTick(0);
+
+				int64_t elapsedMilliseconds = timer.ElapsedMilliseconds();
+
+				if (elapsedMilliseconds > maxTimeInMilliseconds)
+				{
+					break;
+				}
+			}
+		}
+	}
+
+	void RunMessageServer2Pump(int maxIterations, int maxTimeInMilliseconds)
+	{
+		cIGZMessageServer2Ptr pMsgServ;
+
+		if (pMsgServ)
+		{
+			Stopwatch timer;
+			timer.Start();
+
+			for (int i = 0; i < maxIterations; i++)
+			{
+				int queueSize = pMsgServ->GetMessageQueueSize();
+
+				if (queueSize == 0)
+				{
+					break;
+				}
+
+				pMsgServ->OnTick(0);
+
+				int64_t elapsedMilliseconds = timer.ElapsedMilliseconds();
+
+				if (elapsedMilliseconds > maxTimeInMilliseconds)
+				{
+					break;
+				}
+			}
+		}
+	}
 }
 
 ParknRideOrdinance::ParknRideOrdinance()
@@ -100,6 +162,14 @@ void ParknRideOrdinance::UpdateCarCanReachDestination() const
 		logger.WriteLine(LogOptions::Errors, "Failed to pause the game.");
 		return;
 	}
+
+	constexpr int maxIterations = 500;
+	constexpr int maxTimeInMilliseconds = 5000;
+
+	// Process messages for a few seconds, this allows the pause
+	// message subscribers time to process to the message.
+	RunMessageServerPump(maxIterations, maxTimeInMilliseconds);
+	RunMessageServer2Pump(maxIterations, maxTimeInMilliseconds);
 
 	const bool carCanReachDestination = !on;
 

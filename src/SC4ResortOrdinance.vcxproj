@@ -20,6 +20,7 @@
     <ClInclude Include="OrdinanceBase.h" />
     <ClInclude Include="OrdinancePropertyHolder.h" />
     <ClInclude Include="ParknRideOrdinance.h" />
+    <ClInclude Include="Stopwatch.h" />
     <ClInclude Include="version.h" />
   </ItemGroup>
   <ItemGroup>
@@ -37,6 +38,7 @@
     <ClCompile Include="OrdinancePropertyHolder.cpp" />
     <ClCompile Include="ParknRideOrdinance.cpp" />
     <ClCompile Include="ParknRideOrdinanceDllDirector.cpp" />
+    <ClCompile Include="Stopwatch.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
