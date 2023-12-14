@@ -21,6 +21,7 @@ class cISC4PollutionSimulator;
 class cISC4ResidentialSimulator;
 class cISC4Simulator;
 class cISC4TractDeveloper;
+class cISC4TrafficSimulator;
 class cISC4TutorialSystem;
 
 class cISC4City : public cIGZUnknown
@@ -108,7 +109,7 @@ class cISC4City : public cIGZUnknown
 		virtual cISC4PollutionSimulator* GetPollutionSimulator(void) = 0;
 		virtual intptr_t GetPowerSimulator(void) = 0;
 		virtual cISC4ResidentialSimulator* GetResidentialSimulator(void) = 0;
-		virtual intptr_t GetTrafficSimulator(void) = 0;
+		virtual cISC4TrafficSimulator* GetTrafficSimulator(void) = 0;
 		virtual intptr_t GetWeatherSimulator(void) = 0;
 		virtual intptr_t GetMySimAgentSimulator(void) = 0;
 		
