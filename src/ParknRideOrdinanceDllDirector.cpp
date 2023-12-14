@@ -220,11 +220,15 @@ public:
 			if (pOrdinanceSimulator)
 			{
 				cISC4Ordinance* pOrdinance = pOrdinanceSimulator->GetOrdinanceByID(parkAndRideOrdinance.GetID());
+				bool ordinanceInitialized = false;
 
 				if (!pOrdinance)
 				{
 					// Only add the ordinance if it is not already present. If it is part
 					// of the city save file it will have already been loaded at this point.
+					parkAndRideOrdinance.PostCityInit(pCity);
+					ordinanceInitialized = true;
+
 					pOrdinanceSimulator->AddOrdinance(parkAndRideOrdinance);
 					pOrdinance = pOrdinanceSimulator->GetOrdinanceByID(parkAndRideOrdinance.GetID());
 				}
@@ -232,7 +236,12 @@ public:
 				if (pOrdinance)
 				{
 					ParknRideOrdinance* pParkAndRideOrdinance = reinterpret_cast<ParknRideOrdinance*>(pOrdinance);
-					pParkAndRideOrdinance->PostCityInit(pCity);
+
+					if (!ordinanceInitialized)
+					{
+						pParkAndRideOrdinance->PostCityInit(pCity);
+					}
+
 					pParkAndRideOrdinance->SetName(localizedName);
 					pParkAndRideOrdinance->SetDescription(localizedDescription);
 					pParkAndRideOrdinance->UpdateCarCanReachDestination();
