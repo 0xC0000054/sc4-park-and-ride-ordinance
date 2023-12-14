@@ -270,7 +270,7 @@ void ParknRideOrdinance::UpdateCarCanReachDestination(bool calledFromPostCityIni
 				{
 					// We bypass the game's messaging system and dispatch our messages directly to the
 					// target method in the traffic simulator.
-					// This is required to restart the traffic simulator in-game because it need to receive
+					// This is required to restart the traffic simulator in-game because it needs to receive
 					// a PostCityInit after being restarted, and broadcasting that message to the other game
 					// systems would probably cause more issues.
 					cIGZMessageTarget2* target = static_cast<cIGZMessageTarget2*>(pTrafficSim);
