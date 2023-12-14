@@ -244,7 +244,7 @@ public:
 
 					pParkAndRideOrdinance->SetName(localizedName);
 					pParkAndRideOrdinance->SetDescription(localizedDescription);
-					pParkAndRideOrdinance->UpdateCarCanReachDestination();
+					pParkAndRideOrdinance->UpdateCarCanReachDestination(/*calledFromPostCityInit*/true);
 				}
 				else
 				{

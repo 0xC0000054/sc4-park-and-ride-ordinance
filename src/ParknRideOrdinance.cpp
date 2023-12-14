@@ -12,7 +12,9 @@
 
 #include "ParknRideOrdinance.h"
 #include "Stopwatch.h"
+#include "cISC4City.h"
 #include "cISC4Simulator.h"
+#include "cISC4TrafficSimulator.h"
 #include "cGZPersistResourceKey.h"
 #include "cIGZMessageServer.h"
 #include "cIGZMessageServer2.h"
@@ -132,11 +134,12 @@ ParknRideOrdinance::ParknRideOrdinance()
 		/* monthly constant income */ 0,
 		/* monthly income factor */   0.0f,
 		/* income ordinance */		  false,
-	    CreateOrdinanceEffects())
+	    CreateOrdinanceEffects()),
+	  pCity(nullptr)
 {
 }
 
-void ParknRideOrdinance::UpdateCarCanReachDestination() const
+void ParknRideOrdinance::UpdateCarCanReachDestination(bool calledFromPostCityInit) const
 {
 	// Don't bother updating the value if the plugin has not been initialized.
 	// This would occur when the ordinance is removed from the ordinance simulator
@@ -255,52 +258,86 @@ void ParknRideOrdinance::UpdateCarCanReachDestination() const
 		if (valueChanged)
 		{
 			// If we modified the in-memory copy of the traffic simulator tuning exemplar
-			// we first tell the traffic simulator to reload its tuning parameters so that
-			// it picks up the new data.
+			// we first shutdown and restart the traffic simulator.
 			// After that message is sent we verify that the in-memory modifications are
 			// still present.
 
-			cIGZMessageServer2Ptr pMsgServ;
-
-			if (pMsgServ)
+			if (pCity)
 			{
-				// A number of the games's simulators support a message that forces
-				// them to reload their tunable values.
-				// The message takes 2 integer parameters that identify the intended
-				// target. These values appear to be the group and instance IDs of
-				// the simulator's tuning exemplar.
-				// 
-				// This feature was likely used during SC4's development to allow
-				// the tuning values to be applied after they were modified in the
-				// in-game editor.
+				cISC4TrafficSimulator* pTrafficSim = pCity->GetTrafficSimulator();
 
-				constexpr uint32_t kSC4MessageReloadTunableValues = 0xC53D10AA;
-				constexpr uint32_t trafficSimData1 = 0xE7E2C2DB;
-				constexpr uint32_t trafficSimData2 = 0xC9133286;
+				if (pTrafficSim)
+				{
+					cIGZMessageTarget2* target = static_cast<cIGZMessageTarget2*>(pTrafficSim);
+					cRZMessage2Standard message;
 
-				cRZMessage2Standard message;
-				message.SetType(kSC4MessageReloadTunableValues);
-				message.SetData1(trafficSimData1);
-				message.SetData2(trafficSimData2);
+					if (calledFromPostCityInit)
+					{
+						// If we are being called from the DLL's PostCityInit message we send a message
+						// to the traffic simulator that makes it reload its tunable values.
+						// Restarting the traffic simulator in PostCityInit crashes the game.
+						//
+						// A number of the games's simulators support a message that forces
+						// them to reload their tunable values.
+						// The message takes 2 integer parameters that identify the intended
+						// target. These values appear to be the group and instance IDs of
+						// the simulator's tuning exemplar.
+						// 
+						// This feature was likely used during SC4's development to allow
+						// the tuning values to be applied after they were modified in the
+						// in-game editor.
 
-				logger.WriteLine(
-					LogOptions::Info,
-					"Sending the updated 'Travel type can reach destination' value to the traffic simulator.");
+						constexpr uint32_t kSC4MessageReloadTunableValues = 0xC53D10AA;
+						constexpr uint32_t trafficSimData1 = 0xE7E2C2DB;
+						constexpr uint32_t trafficSimData2 = 0xC9133286;
 
-				result = pMsgServ->MessageSend(static_cast<cIGZMessage2*>(static_cast<cIGZMessage2Standard*>(&message)));
-				if (!result)
+						logger.WriteLine(
+							LogOptions::Info,
+							"Sending the updated 'Travel type can reach destination' value to the traffic simulator.");
+
+						message.SetType(kSC4MessageReloadTunableValues);
+						message.SetData1(trafficSimData1);
+						message.SetData2(trafficSimData2);
+					}
+					else
+					{
+						// If the user changed the ordinance state in-game we shutdown and restart the traffic simulator.
+						// We send it a PostCityInit message to make it compete the setup it performs when loading a city.
+
+						logger.WriteLine(
+							LogOptions::Info,
+							"Restarting the traffic simulator for the 'Travel type can reach destination' value change.");
+
+						pTrafficSim->Shutdown();
+						pTrafficSim->Init();
+
+						// Dispatch a PostCityInit message directly to the traffic simulator.
+						// This is required for it to reinitialize its data after we restarted it.
+						constexpr uint32_t kSC4MessagePostCityInit = 0x26D31EC1;
+
+						message.SetType(kSC4MessagePostCityInit);
+						message.SetVoid1(pCity); // The first parameter is always a pointer to the city.
+						message.SetIGZUnknown(pCity);
+						message.SetData2(1); // This parameter is always 1 for a city that has been loaded.
+						message.SetData3(0); // This parameter is always 0.
+					}
+
+					target->DoMessage(static_cast<cIGZMessage2*>(static_cast<cIGZMessage2Standard*>(&message)));
+				}
+				else
 				{
 					logger.WriteLine(
 						LogOptions::Errors,
-						"Failed to send the updated 'Travel type can reach destination' value to the traffic simulator.");
+						"The traffic simulator pointer was null.");
 				}
 			}
 			else
 			{
 				logger.WriteLine(
 					LogOptions::Errors,
-					"Failed to send the updated 'Travel type can reach destination' value to the traffic simulator.");
+					"The city pointer was null.");
 			}
+			
 
 			// Verify that are in-memory modifications to the exemplar are sill present.
 
@@ -376,7 +413,7 @@ bool ParknRideOrdinance::SetOn(bool isOn)
 	if (on != isOn)
 	{
 		on = isOn;
-		UpdateCarCanReachDestination();
+		UpdateCarCanReachDestination(/*calledFromPostCityInit*/false);
 	}
 
 	return true;
@@ -390,6 +427,7 @@ bool ParknRideOrdinance::PostCityInit(cISC4City* pCity)
 	{
 		if (pCity)
 		{
+			this->pCity = pCity;
 			result = true;
 		}
 		else
@@ -404,6 +442,7 @@ bool ParknRideOrdinance::PostCityInit(cISC4City* pCity)
 bool ParknRideOrdinance::PreCityShutdown(cISC4City* pCity)
 {
 	bool result = OrdinanceBase::PreCityShutdown(pCity);
+	pCity = nullptr;
 
 	return result;
 }

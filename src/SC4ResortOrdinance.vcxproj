@@ -16,6 +16,7 @@
     <ClInclude Include="..\vendor\include\cIGZLanguageUtility.h" />
     <ClInclude Include="..\vendor\include\cIGZPersistResourceCache.h" />
     <ClInclude Include="..\vendor\include\cIGZPersistResourceManager.h" />
+    <ClInclude Include="cISC4TrafficSimulator.h" />
     <ClInclude Include="Logger.h" />
     <ClInclude Include="OrdinanceBase.h" />
     <ClInclude Include="OrdinancePropertyHolder.h" />
@@ -91,6 +92,7 @@
       </PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>..\vendor\include</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4584</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -114,6 +116,7 @@
       </PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>..\vendor\include</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4584</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

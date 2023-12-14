@@ -19,7 +19,7 @@ public:
 
 	ParknRideOrdinance();
 
-	void UpdateCarCanReachDestination() const;
+	void UpdateCarCanReachDestination(bool calledFromPostCityInit) const;
 
 	// Sets the name of the ordinance.
 	// This is used to allow the value to be translated.
@@ -39,5 +39,9 @@ public:
 
 	// Shuts down the ordinance when exiting a city.
 	bool PreCityShutdown(cISC4City* pCity) override;
+
+private:
+
+	cISC4City* pCity;
 };
 
