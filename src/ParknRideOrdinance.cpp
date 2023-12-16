@@ -287,7 +287,7 @@ void ParknRideOrdinance::UpdateCarCanReachDestination(bool calledFromPostCityIni
 						// The message takes 2 integer parameters that identify the intended
 						// target. These values appear to be the group and instance IDs of
 						// the simulator's tuning exemplar.
-						// 
+						//
 						// This feature was likely used during SC4's development to allow
 						// the tuning values to be applied after they were modified in the
 						// in-game editor.
@@ -342,7 +342,6 @@ void ParknRideOrdinance::UpdateCarCanReachDestination(bool calledFromPostCityIni
 					LogOptions::Errors,
 					"The city pointer was null.");
 			}
-			
 
 			// Verify that are in-memory modifications to the exemplar are sill present.
 
