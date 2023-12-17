@@ -14,7 +14,6 @@
     <ClInclude Include="..\vendor\include\cGZPersistResourceKey.h" />
     <ClInclude Include="..\vendor\include\cIGZLanguageManager.h" />
     <ClInclude Include="..\vendor\include\cIGZLanguageUtility.h" />
-    <ClInclude Include="..\vendor\include\cIGZPersistResourceCache.h" />
     <ClInclude Include="..\vendor\include\cIGZPersistResourceManager.h" />
     <ClInclude Include="cISC4TrafficSimulator.h" />
     <ClInclude Include="Logger.h" />
