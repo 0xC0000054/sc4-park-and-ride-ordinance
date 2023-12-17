@@ -9,7 +9,7 @@
 // See LICENSE.txt for more information.
 //
 ////////////////////////////////////////////////////////////////////////////
- 
+
 #include "version.h"
 #include "Logger.h"
 #include "ParknRideOrdinance.h"

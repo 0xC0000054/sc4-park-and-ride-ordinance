@@ -51,7 +51,7 @@ OrdinanceBase::OrdinanceBase(
 }
 
 OrdinanceBase::OrdinanceBase(
-	uint32_t clsid, 
+	uint32_t clsid,
 	const char* name,
 	const char* description,
 	int64_t enactmentIncome,
@@ -252,7 +252,7 @@ bool OrdinanceBase::Shutdown(void)
 		enabled = false;
 		initialized = false;
 	}
-	
+
 	return true;
 }
 
@@ -270,7 +270,7 @@ int64_t OrdinanceBase::GetCurrentMonthlyIncome(void)
 	const int32_t cityPopulation = pResidentialSimulator->GetPopulation();
 	const double populationIncome = monthlyIncomeFactor * static_cast<double>(cityPopulation);
 
-	const double monthlyIncome = static_cast<double>(monthlyConstantIncome) + populationIncome;	
+	const double monthlyIncome = static_cast<double>(monthlyConstantIncome) + populationIncome;
 
 	int64_t monthlyIncomeInteger = 0;
 

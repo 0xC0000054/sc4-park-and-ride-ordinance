@@ -87,7 +87,7 @@ cRZBaseVariant::cRZBaseVariant(cRZBaseVariant&& other) noexcept
 	  numericTypes(std::move(other.numericTypes)),
 	  voidPtr(other.voidPtr),
 	  gzUnknown(other.gzUnknown),
-	  refCount(other.refCount)	  
+	  refCount(other.refCount)
 {
 	other.type = cIGZVariant::Type::Empty;
 	other.count = 0;
@@ -1195,7 +1195,7 @@ void cRZBaseVariant::RefIGZUnknown(cIGZUnknown** value)
 void cRZBaseVariant::RefIGZUnknown(cIGZUnknown* value)
 {
 	SetType(cIGZVariant::Type::GZUnknown);
-	
+
 	if (value)
 	{
 		value->AddRef();
