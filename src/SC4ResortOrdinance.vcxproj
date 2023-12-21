@@ -15,6 +15,8 @@
     <ClInclude Include="..\vendor\include\cIGZLanguageManager.h" />
     <ClInclude Include="..\vendor\include\cIGZLanguageUtility.h" />
     <ClInclude Include="..\vendor\include\cIGZPersistResourceManager.h" />
+    <ClInclude Include="..\vendor\include\StringResourceKey.h" />
+    <ClInclude Include="..\vendor\include\StringResourceManager.h" />
     <ClInclude Include="cISC4TrafficSimulator.h" />
     <ClInclude Include="Logger.h" />
     <ClInclude Include="OrdinanceBase.h" />
@@ -33,6 +35,7 @@
     <ClCompile Include="..\vendor\src\cRZMessage2.cpp" />
     <ClCompile Include="..\vendor\src\cRZMessage2Standard.cpp" />
     <ClCompile Include="..\vendor\src\cSCBaseProperty.cpp" />
+    <ClCompile Include="..\vendor\src\StringResourceManager.cpp" />
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="OrdinanceBase.cpp" />
     <ClCompile Include="OrdinancePropertyHolder.cpp" />

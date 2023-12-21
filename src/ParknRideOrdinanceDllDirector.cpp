@@ -46,7 +46,6 @@
 
 static constexpr uint32_t kSC4MessagePostCityInit = 0x26D31EC1;
 static constexpr uint32_t kSC4MessagePreCityShutdown = 0x26D31EC2;
-static constexpr uint32_t kSC4MessagePostAppServicesInit = 0x2B96B3EA;
 
 static constexpr uint32_t kParknRideOrdinancePluginDirectorID = 0x198d91a2;
 
@@ -111,104 +110,6 @@ public:
 		return result;
 	}
 
-	bool TryGetResourceString(uint32_t groupID, uint32_t instanceID, cIGZString** outString)
-	{
-		bool result = false;
-
-		if (outString)
-		{
-			if (*outString)
-			{
-				(*outString)->Release();
-				*outString = nullptr;
-			}
-
-			constexpr uint32_t LTEXTTypeID = 0x2026960B;
-
-			cGZPersistResourceKey key(LTEXTTypeID, groupID, instanceID);
-
-			cIGZPersistResourceManagerPtr resourceManager;
-			if (resourceManager)
-			{
-				// GetPrivateResource skips adding the value to the game's resource cache.
-				result = resourceManager->GetPrivateResource(
-					key,
-					GZIID_cIGZString,
-					reinterpret_cast<void**>(outString),
-					0,
-					nullptr);
-			}
-		}
-
-		return result;
-	}
-
-	bool GetLocalizedText(uint32_t defaultLanguageGroupID, uint32_t instanceID, cIGZString** outString)
-	{
-		bool result = false;
-
-		cIGZLanguageManagerPtr languageManager;
-
-		if (languageManager)
-		{
-			// The localized resources use a group ID that is offset from the default language
-			// group ID. This system allows a single DAT file to contain string resources for all
-			// of the languages that are supported by the game.
-
-			const uint32_t currentLanguage = languageManager->GetCurrentLanguage();
-			const uint32_t currentLanguageGroupID = defaultLanguageGroupID + currentLanguage;
-
-			// We will search the loaded string resources for a matching value in
-			// the game's currently configured language. If one is not found we will use
-			// the default English string resources.
-			// If both of those fail we will fall back to using the hard-coded ordinance
-			// name and description.
-
-			result = TryGetResourceString(currentLanguageGroupID, instanceID, outString);
-			if (!result)
-			{
-				result = TryGetResourceString(defaultLanguageGroupID, instanceID, outString);
-			}
-		}
-
-		return result;
-	}
-
-	void LoadLocalizedStringResources()
-	{
-		const uint32_t DefaultLanguageGroupID = 0xB5E861D2;
-		constexpr uint32_t OrdinanceNameInstanceID = 0xB9E7C616;
-		constexpr uint32_t OrdinanceDescriptionInstanceID = 0x0F85A3C7;
-
-		cIGZString* name = nullptr;
-		cIGZString* description = nullptr;
-
-		if (GetLocalizedText(DefaultLanguageGroupID, OrdinanceNameInstanceID, &name))
-		{
-			if (GetLocalizedText(DefaultLanguageGroupID, OrdinanceDescriptionInstanceID, &description))
-			{
-				localizedName.Copy(*name);
-				localizedDescription.Copy(*description);
-
-				description->Release();
-			}
-
-			name->Release();
-		}
-	}
-
-	void PostAppServicesInit()
-	{
-		LoadLocalizedStringResources();
-
-		cIGZMessageServer2Ptr pMsgServ;
-
-		if (pMsgServ)
-		{
-			pMsgServ->RemoveNotification(this, kSC4MessagePostAppServicesInit);
-		}
-	}
-
 	void PostCityInit(cIGZMessage2Standard* pStandardMsg)
 	{
 		cISC4City* pCity = reinterpret_cast<cISC4City*>(pStandardMsg->GetIGZUnknown());
@@ -242,8 +143,6 @@ public:
 						pParkAndRideOrdinance->PostCityInit(pCity);
 					}
 
-					pParkAndRideOrdinance->SetName(localizedName);
-					pParkAndRideOrdinance->SetDescription(localizedDescription);
 					pParkAndRideOrdinance->UpdateCarCanReachDestination(/*calledFromPostCityInit*/true);
 				}
 				else
@@ -285,9 +184,6 @@ public:
 
 		switch (dwType)
 		{
-		case kSC4MessagePostAppServicesInit:
-			PostAppServicesInit();
-			break;
 		case kSC4MessagePostCityInit:
 			PostCityInit(pStandardMsg);
 			break;
@@ -309,7 +205,6 @@ public:
 			std::vector<uint32_t> requiredNotifications;
 			requiredNotifications.push_back(kSC4MessagePostCityInit);
 			requiredNotifications.push_back(kSC4MessagePreCityShutdown);
-			requiredNotifications.push_back(kSC4MessagePostAppServicesInit);
 
 			for (uint32_t messageID : requiredNotifications)
 			{

@@ -21,14 +21,6 @@ public:
 
 	void UpdateCarCanReachDestination(bool calledFromPostCityInit) const;
 
-	// Sets the name of the ordinance.
-	// This is used to allow the value to be translated.
-	void SetName(const cIGZString& name);
-
-	// Sets the description of the ordinance.
-	// This is used to allow the value to be translated.
-	void SetDescription(const cIGZString& description);
-
 	// Gets the monthly income or expense when the ordinance is enabled.
 	int64_t GetCurrentMonthlyIncome() override;
 

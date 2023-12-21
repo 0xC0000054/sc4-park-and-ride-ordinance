@@ -128,7 +128,9 @@ ParknRideOrdinance::ParknRideOrdinance()
 	: OrdinanceBase(
 		kParknRideOrdinanceCLSID,
 		"Park n Ride",
+		StringResourceKey(0xB5E861D2, 0xB9E7C616),
 		"Program that promotes park and ride.",
+		StringResourceKey(0xB5E861D2, 0x0F85A3C7),
 		/* enactment income */		  0,
 		/* retracment income */       0,
 		/* monthly constant income */ 0,
@@ -388,22 +390,6 @@ void ParknRideOrdinance::UpdateCarCanReachDestination(bool calledFromPostCityIni
 	if (!pSimulator->HiddenResume())
 	{
 		logger.WriteLine(LogOptions::Errors, "Failed to resume the game.");
-	}
-}
-
-void ParknRideOrdinance::SetName(const cIGZString& name)
-{
-	if (name.Strlen() > 0 && !this->name.IsEqual(name, false))
-	{
-		this->name.Copy(name);
-	}
-}
-
-void ParknRideOrdinance::SetDescription(const cIGZString& description)
-{
-	if (name.Strlen() > 0 && !this->description.IsEqual(description, false))
-	{
-		this->description.Copy(description);
 	}
 }
 
