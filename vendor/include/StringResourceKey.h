@@ -9,7 +9,7 @@ struct StringResourceKey
 
 	/**
 	 * @brief Constructs a StringResourceKey with the specified group and instance IDs.
-	 * @param defaultLanguageGroupID The group ID of the language resource.
+	 * @param groupID The group ID of the language resource.
 	 * @param instanceID The instance ID of the language resource.
 	*/
 	StringResourceKey(uint32_t groupID, uint32_t instanceID)
