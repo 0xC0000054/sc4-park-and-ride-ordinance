@@ -400,8 +400,10 @@ int64_t ParknRideOrdinance::GetCurrentMonthlyIncome()
 
 bool ParknRideOrdinance::SetOn(bool isOn)
 {
+	bool oldOn = on;
+
 	OrdinanceBase::SetOn(isOn);
-	if (on != isOn)
+	if (oldOn != isOn)
 	{
 		UpdateCarCanReachDestination(/*calledFromPostCityInit*/false);
 	}
