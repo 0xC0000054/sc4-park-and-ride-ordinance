@@ -35,7 +35,8 @@ See [LICENSE.txt](LICENSE.txt) for more information.
 ## 3rd party code
 
 [gzcom-dll](https://github.com/nsgomez/gzcom-dll/tree/master) Located in the vendor folder, MIT License.    
-[Windows Implementation Library](https://github.com/microsoft/wil) MIT License    
+[SC4Fix](https://github.com/nsgomez/sc4fix) - MIT License.    
+[Windows Implementation Library](https://github.com/microsoft/wil) - MIT License.    
 
 # Source Code
 

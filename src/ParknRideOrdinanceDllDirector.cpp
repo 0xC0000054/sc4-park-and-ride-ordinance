@@ -13,6 +13,7 @@
 #include "version.h"
 #include "Logger.h"
 #include "ParknRideOrdinance.h"
+#include "SC4VersionDetection.h"
 #include "cIGZFrameWork.h"
 #include "cIGZApp.h"
 #include "cISC4App.h"
@@ -89,7 +90,12 @@ public:
 		// the framework calls this method before OnStart or any of the hook callbacks.
 		// This method is called once when initializing a director, the list of class IDs
 		// it returns is cached by the framework.
-		pCallback(parkAndRideOrdinance.GetID(), 0, pContext);
+
+		// We require game version 641, so don't bother adding the class on older versions.
+		if (SC4VersionDetection::GetInstance().GetGameVersion() == 641)
+		{
+			pCallback(parkAndRideOrdinance.GetID(), 0, pContext);
+		}
 	}
 
 	bool GetClassObject(uint32_t rclsid, uint32_t riid, void** ppvObj)
@@ -222,16 +228,30 @@ public:
 
 	bool OnStart(cIGZCOM* pCOM)
 	{
-		cIGZFrameWork* const pFramework = RZGetFrameWork();
+		// We require game version 641, so don't bother adding the class on older versions.
+		const uint16_t gameVersion = SC4VersionDetection::GetInstance().GetGameVersion();
 
-		if (pFramework->GetState() < cIGZFrameWork::kStatePreAppInit)
+		if (gameVersion == 641)
 		{
-			pFramework->AddHook(this);
+			cIGZFrameWork* const pFramework = RZGetFrameWork();
+
+			if (pFramework->GetState() < cIGZFrameWork::kStatePreAppInit)
+			{
+				pFramework->AddHook(this);
+			}
+			else
+			{
+				PreAppInit();
+			}
 		}
 		else
 		{
-			PreAppInit();
+			Logger::GetInstance().WriteLineFormatted(
+				LogOptions::Errors,
+				"Unsupported game version: %d",
+				gameVersion);
 		}
+
 		return true;
 	}
 

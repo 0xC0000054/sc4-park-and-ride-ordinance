@@ -17,11 +17,12 @@
     <ClInclude Include="..\vendor\include\cIGZPersistResourceManager.h" />
     <ClInclude Include="..\vendor\include\StringResourceKey.h" />
     <ClInclude Include="..\vendor\include\StringResourceManager.h" />
-    <ClInclude Include="cISC4TrafficSimulator.h" />
+    <ClInclude Include="cSC4TrafficSimulator.h" />
     <ClInclude Include="Logger.h" />
     <ClInclude Include="OrdinanceBase.h" />
     <ClInclude Include="OrdinancePropertyHolder.h" />
     <ClInclude Include="ParknRideOrdinance.h" />
+    <ClInclude Include="SC4VersionDetection.h" />
     <ClInclude Include="Stopwatch.h" />
     <ClInclude Include="version.h" />
   </ItemGroup>
@@ -41,6 +42,7 @@
     <ClCompile Include="OrdinancePropertyHolder.cpp" />
     <ClCompile Include="ParknRideOrdinance.cpp" />
     <ClCompile Include="ParknRideOrdinanceDllDirector.cpp" />
+    <ClCompile Include="SC4VersionDetection.cpp" />
     <ClCompile Include="Stopwatch.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -100,6 +102,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
+      <AdditionalDependencies>version.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>xcopy "$(TargetPath)" "G:\GOG Galaxy\Games\SimCity 4 Deluxe Edition\Plugins" /y</Command>
@@ -126,6 +129,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
+      <AdditionalDependencies>version.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>xcopy "$(TargetPath)" "G:\GOG Galaxy\Games\SimCity 4 Deluxe Edition\Plugins" /y</Command>
